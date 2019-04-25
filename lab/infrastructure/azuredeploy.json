@@ -9,12 +9,6 @@
                 "description": "The name of the Managed Cluster resource."
             }
         },
-        "dnsPrefix": {
-            "type": "string",
-            "metadata": {
-                "description": "Optional DNS prefix to use with hosted Kubernetes API server FQDN."
-            }
-        },
         "nodeCount": {
             "type": "int",
             "defaultValue": 2,
@@ -74,9 +68,6 @@
                 "parameters": {
                     "clusterName": {
                         "value": "[parameters('clusterName')]"
-                    },
-                    "dnsPrefix": {
-                        "value": "[parameters('dnsPrefix')]"
                     },
                     "servicePrincipalClientId": {
                         "value": "[parameters('servicePrincipalClientId')]"
