@@ -6,7 +6,7 @@ This project contains instructions to deploy the Global Azure Bootcamp 2019 Scie
 # Quickstart
 To quickly deploy the infrastructure for the science lab (Azure Kubernetes Cluster), click on the button below. **If it's your first deployment, we strongly recommend to read the instructions below.**
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FIntelequia%2FGAB2019ScienceLab%2Fmaster%2Flab%2F%2Finfrastructure%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fantsaa%2FGAB2019ScienceLab%2Fmaster%2Flab%2F%2Finfrastructure%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
