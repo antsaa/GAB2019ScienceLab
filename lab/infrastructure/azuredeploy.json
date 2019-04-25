@@ -4,7 +4,7 @@
     "parameters": {
         "clusterName": {
             "type": "string",
-            "defaultValue":"gabakscluster",
+            "defaultValue": "gabakscluster",
             "metadata": {
                 "description": "The name of the Managed Cluster resource."
             }
@@ -42,35 +42,63 @@
             "metadata": {
                 "description": "Configure all linux machines with the SSH RSA public key string. Your key should include three parts, for example 'ssh-rsa AAAAB...snip...UcyupgH azureuser@linuxvm'"
             }
+        },
+        "servicePrincipalClientId": {
+            "metadata": {
+                "description": "Client ID (used by cloudprovider)"
+            },
+            "type": "securestring"
+        },
+        "servicePrincipalClientSecret": {
+            "metadata": {
+                "description": "The Service Principal Client Secret."
+            },
+            "type": "securestring"
         }
     },
     "variables": {
-      "DeployContainer.Uri": "https://raw.githubusercontent.com/antsaa/GAB2019ScienceLab/master/lab/infrastructure/aks.json"	
+        "DeployContainer.Uri": "https://raw.githubusercontent.com/antsaa/GAB2019ScienceLab/master/lab/infrastructure/aks.json"
     },
     "resources": [
-      {
-        "apiVersion": "2015-01-01",
-        "name": "deployment",
-        "type": "Microsoft.Resources/deployments",
-        "dependsOn": [
-        ],
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "[variables('DeployContainer.Uri')]",
-            "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-              "clusterName" : { "value" : "[parameters('clusterName')]"},
-              "dnsPrefix" : { "value" : "[parameters('dnsPrefix')]" },
-              "nodeCount" : { "value" : "[parameters('nodeCount')]"},
-              "agentVMSize" : { "value" : "[parameters('agentVMSize')]"},
-              "linuxAdminUsername" : { "value" : "[parameters('linuxAdminUsername')]"},
-              "sshRSAPublicKey" : { "value" : "[parameters('sshRSAPublicKey')]"}
-          }
+        {
+            "apiVersion": "2015-01-01",
+            "name": "deployment",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('DeployContainer.Uri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "clusterName": {
+                        "value": "[parameters('clusterName')]"
+                    },
+                    "dnsPrefix": {
+                        "value": "[parameters('dnsPrefix')]"
+                    },
+                    "servicePrincipalClientId": {
+                        "value": "[parameters('servicePrincipalClientId')]"
+                    },
+                    "servicePrincipalClientSecret": {
+                        "value": "[parameters('servicePrincipalClientSecret')]"
+                    },
+                    "nodeCount": {
+                        "value": "[parameters('nodeCount')]"
+                    },
+                    "agentVMSize": {
+                        "value": "[parameters('agentVMSize')]"
+                    },
+                    "linuxAdminUsername": {
+                        "value": "[parameters('linuxAdminUsername')]"
+                    },
+                    "sshRSAPublicKey": {
+                        "value": "[parameters('sshRSAPublicKey')]"
+                    }
+                }
+            }
         }
-      }  
     ],
-    "outputs": {
-    }
-  }
+    "outputs": {}
+}
