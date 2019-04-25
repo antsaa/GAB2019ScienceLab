@@ -51,7 +51,8 @@ Deploy the lab using Azure Kubernetes Service.
 3. Fetch credentials for your newly created cluster:
     * `az aks get-credentials -g turkulab -n gabakscluster`
 
-4. Install the NGINX ingress controller:
+4. Install the NGINX ingress controller and load balancer:
+    * `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml`
     * `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml`
 
 5. Apply deployment:

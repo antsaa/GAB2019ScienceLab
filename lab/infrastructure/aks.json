@@ -57,7 +57,7 @@
             "location": "[resourceGroup().location]",
             "name": "[parameters('clusterName')]",
             "properties": {
-                "kubernetesVersion": "1.12.6",
+                "kubernetesVersion": "1.13.5",
                 "dnsPrefix" : "turkulab",
                 "agentPoolProfiles": [
                     {
