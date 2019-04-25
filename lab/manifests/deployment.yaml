@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sciencelab2019-deployment
+  labels:
+    app: sciencelab2019
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sciencelab2019
+  template:
+    metadata:
+      labels:
+        app: sciencelab2019
+    spec:
+      containers:
+        - name: "sciencelab2019"
+          image: "globalazurebootcamp/sciencelab2019:latest"
+          env:
+            - name: BatchClient__Email
+              value: antton.alkio@if.fi
+            - name: BatchClient__Fullname
+              value: Antton Alkio
+            - name: BatchClient__TeamName
+              value: If
+            - name: BatchClient__CompanyName
+              value: If P&C Insurance
+            - name: BatchClient__CountryCode
+              value: FI
+            - name: BatchClient__LabKeyCode
+              value: ZRF-NPY-MUP
+          imagePullPolicy: Always

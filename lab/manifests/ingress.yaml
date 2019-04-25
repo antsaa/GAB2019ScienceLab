@@ -1,0 +1,12 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sciencelab2019-ingress
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /
+          backend:
+            serviceName: sciencelab2019-service
+            servicePort: 80
