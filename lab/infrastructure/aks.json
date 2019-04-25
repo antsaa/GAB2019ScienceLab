@@ -56,7 +56,7 @@
               "agentPoolProfiles": [
                   {
                       "name": "agentpool",
-                      "osDiskSizeGB": "0",
+                      "osDiskSizeGB": 0,
                       "count": "[parameters('nodeCount')]",
                       "vmSize": "[parameters('agentVMSize')]",
                       "osType": "Linux",

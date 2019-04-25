@@ -2,6 +2,47 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "clusterName": {
+            "type": "string",
+            "defaultValue":"gabakscluster",
+            "metadata": {
+                "description": "The name of the Managed Cluster resource."
+            }
+        },
+        "dnsPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Optional DNS prefix to use with hosted Kubernetes API server FQDN."
+            }
+        },
+        "nodeCount": {
+            "type": "int",
+            "defaultValue": 2,
+            "metadata": {
+                "description": "The number of nodes for the cluster."
+            },
+            "minValue": 1,
+            "maxValue": 50
+        },
+        "agentVMSize": {
+            "type": "string",
+            "defaultValue": "Standard_DS2_v2",
+            "metadata": {
+                "description": "The size of the Virtual Machine."
+            }
+        },
+        "linuxAdminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "User name for the Linux Virtual Machines."
+            }
+        },
+        "sshRSAPublicKey": {
+            "type": "string",
+            "metadata": {
+                "description": "Configure all linux machines with the SSH RSA public key string. Your key should include three parts, for example 'ssh-rsa AAAAB...snip...UcyupgH azureuser@linuxvm'"
+            }
+        }
     },
     "variables": {
       "DeployContainer.Uri": "https://raw.githubusercontent.com/antsaa/GAB2019ScienceLab/master/lab/infrastructure/aks.json"	
@@ -19,7 +60,14 @@
             "uri": "[variables('DeployContainer.Uri')]",
             "contentVersion": "1.0.0.0"
           },
-          "parameters": {}
+          "parameters": {
+              "clusterName" : { "value" : "[parameters('clusterName')]"},
+              "dnsPrefix" : { "value" : "[parameters('dnsPrefix')]" },
+              "nodeCount" : { "value" : "[parameters('nodeCount')]"},
+              "agentVMSize" : { "value" : "[parameters('agentVMSize')]"},
+              "linuxAdminUsername" : { "value" : "[parameters('linuxAdminUsername')]"},
+              "sshRSAPublicKey" : { "value" : "[parameters('sshRSAPublicKey')]"}
+          }
         }
       }  
     ],
