@@ -58,6 +58,7 @@
             "name": "[parameters('clusterName')]",
             "properties": {
                 "kubernetesVersion": "1.12.6",
+                "dnsPrefix" : "turkulab",
                 "agentPoolProfiles": [
                     {
                         "name": "agentpool",
