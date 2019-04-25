@@ -4,8 +4,8 @@
 Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupName,
     [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
-    [string] $TemplateFile = 'GABClient.json',
-    [string] $TemplateParametersFile = 'GABClient.parameters.json',
+    [string] $TemplateFile = 'azuredeploy.json',
+    [string] $TemplateParametersFile = 'azuredeploy.parameters.json',
     [switch] $ValidateOnly
 )
 
