@@ -12,11 +12,9 @@ To quickly deploy the infrastructure for the science lab (Azure Kubernetes Clust
 
 # Introduction
 
-```diff
-- PLEASE ADVISE
+## PLEASE ADVISE
 
-This is a fork of the official repository. It uses Azure Kubernetes Service instead of ACI. Therefore the costs described in the ACI version do not apply for this fork. AKS is charged based on the node VMs only, so the price will depend on the amount and size of VMs you deploy.
-```
+**This is a fork of the official repository. It uses Azure Kubernetes Service instead of ACI. Therefore the costs described in the ACI version do not apply for this fork. AKS is charged based on the node VMs only, so the price will depend on the amount and size of VMs you deploy.**
 
 This project contains all the source code for the Global Azure Bootcamp 2019 Science Lab. Created by David Rodriguez ([@davidjrh](http://twitter.com/davidjrh)), Martin Abbott ([@martinabbott](http://twitter.com/martinabbott)) and Santiago Porras ([@saintwukong](http://twitter.com/saintwukong)) for the Global Azure Bootcamp 2019 Science Lab running Enric Pallé, Diego Hidalgo and Sebastian Hidalgo's Machine Learning algorithms for exoplanet hunting at the [Instituto de Astrofisica de Canarias](http://www.iac.es/index.php?lang=en) using TESS mission data from NASA.
 
