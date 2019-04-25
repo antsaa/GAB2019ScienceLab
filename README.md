@@ -11,6 +11,13 @@ To quickly deploy the infrastructure for the science lab (Azure Kubernetes Clust
 </a>
 
 # Introduction
+
+```diff
+- PLEASE ADVISE
+```
+
+This is a fork of the official repository by ([@kealin]). It uses Azure Kubernetes Service instead of ACI. Therefore the costs described in the ACI version do not apply for this fork. AKS is charged based on the node VMs only, so the price will depend on the amount and size of VMs you deploy.
+
 This project contains all the source code for the Global Azure Bootcamp 2019 Science Lab. Created by David Rodriguez ([@davidjrh](http://twitter.com/davidjrh)), Martin Abbott ([@martinabbott](http://twitter.com/martinabbott)) and Santiago Porras ([@saintwukong](http://twitter.com/saintwukong)) for the Global Azure Bootcamp 2019 Science Lab running Enric Pallé, Diego Hidalgo and Sebastian Hidalgo's Machine Learning algorithms for exoplanet hunting at the [Instituto de Astrofisica de Canarias](http://www.iac.es/index.php?lang=en) using TESS mission data from NASA.
 
 See more at https://global.azurebootcamp.net/global-azure-science-lab-2019/
@@ -20,97 +27,64 @@ See more at https://global.azurebootcamp.net/global-azure-science-lab-2019/
 ## Requirements
 
 In order to participate on the GAB Science Lab you will need:
-* An active Azure subscription. The easiest way to deploy the lab is by using Azure Container Instances. You will need an active Azure subscription to deploy the containers on Azure. You can signup for a free subscription [here](https://azure.microsoft.com/free/) or use the Azure Passes shared on the Global Azure Bootcamp event. 
+* An active Azure subscription. You can signup for a free subscription [here](https://azure.microsoft.com/free/) or use the Azure Passes shared on the Global Azure Bootcamp event. 
 * You can deploy the client on any other Docker powered environment (see deployment instructions at the end of this document):
     * locally on your laptop using Docker Desktop, follow instructions at https://www.docker.com/products/docker-desktop
     * on any other environment, check https://docs.docker.com/install/
 
-## Deploying the lab using Azure Container Instances (ACI)
-The easiest way to deploy the Science Lab is by using Azure Container Instances. We have prepared a resource manager template that simplifies this step, by asking you some parameters that are used in the container that will be used later on the Global Dashboards for statistics and for fun. 
-1. Click on the deployment button below to start the process:
+## Deploying the lab using Azure Kubernetes Service (AKS)
+Deploy the lab using Azure Kubernetes Service. 
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FIntelequia%2FGAB2019ScienceLab%2Fmaster%2Flab%2FGABClient.json" target="_blank">
+1. Create a Service Principal
+    * `az ad sp create-for-rbac --skip-assignment`
+    * Copy or memorize the appid and password attribute values, you'll need these in the next step
+
+2. Click on the deployment button below to start the process (or use CLI, up to you):
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fantsaa%2FGAB2019ScienceLab%2Fmaster%2Flab%2F%2Finfrastructure%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
 2. Fill the form. You can get info about each field if you hold the cursor over the info icon.
-    * Choose the subscription and resource group you where you want to deploy the container instances
-    * **Location**: **IMPORTANT: the Azure Container Instances service is not available in all the regions**. At time of writing, you must choose between one of these locations:
-        * "Central US"
-        * "East US"
-        * "East US2"
-        * "North Central US"
-        * "South Central US"
-        * "West US"
-        * "West US2"
-        * "North Europe"
-        * "West Europe"
-        * "East Asia"
-        * "Southeast Asia"
-        * "Japan East"
-        * "Australia East"
-        * "Central India"
-        * "South India"
-        * "Canada Central"
-    * **Email, FullName, TeamName, CompanyName**: fill with your personal info. It be displayed on the global dashboards (e-mail will not)
-    * **CountryCode**: the 2 character ISO2 country code. Find your code at [Wikipedia](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-    * **LabKeyCode**: Is a predefined string with your location LAB Key. Ask admin staff at your location for the code. If you don't know any, just use THE-GAB-ORG as key.    
-    * **InstanceCount**: Number of container instance groups (60 or less, there is a limit of 60 ACIs per Azure susbcription). Check the available instances/quotas in your subscription before setting up a big number. **TIP: You can start with 1 or 2 container instance groups and repeat this process later to deploy more instances**
-	
-	![Deployment parameters](https://github.com/intelequia/GAB2019ScienceLab/raw/master/images/Deployment1.jpg)
+    * You can use default values where set
+    * For SP client ID use the appid from previous step and for secret the password from previous step
+    * Also enter an SSH public key, if you don't have one you can create one by running `ssh-keygen -t rsa`
 
+3. Fetch credentials for your newly created cluster:
+    * `az aks get-credentials -g turkulab -n gabakscluster`
 
-Click on the Accept the Terms and Conditions checkbox, and relax waiting for the green check. Will take around 5 minutes to complete.
+4. Install the NGINX ingress controller:
+    * `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml`
 
-![Deployment completed](https://github.com/intelequia/GAB2019ScienceLab/raw/master/images/Deployment2.jpg)
+5. Apply deployment:
+    * `kubectl apply -f lab/manifests/deployment.yaml`
 
+6. Apply service:
+    * `kubectl apply -f lab/manifests/service.yaml`
 
-# Verifying the lab is working properly
-Once the lab has been deployed, you will see a set of resources under the resource group, one per container instance group. Each group will container just one container instance. 
-
-![Resource group](https://github.com/intelequia/GAB2019ScienceLab/raw/master/images/Deployment3.jpg)
-
-Click on one of the container instances, and get the public DNS name from the General Settings area. 
-
-![Deployment URL](https://github.com/intelequia/GAB2019ScienceLab/raw/master/images/Deployment4.jpg)
-
-Browse the URL and you would be able to see if the lab is working properly. There are three areas:
-* **Inputs Downloaded**: a green light indicates that is working properly. Every 10 seconds a background process checks if there are no inputs to process, and then downloads a new batch of inputs;
-* **Processing**: a green light indicates that is working properly. A background process starts processing the inputs as soon as they are available locally. The inputs are processed one by one and results are saved into an internal output queue;
-* **Ouputs Uploaded**: a green light indicates that is working properly. Every 10 seconds a background process checks if there are outputs ready to be uploaded to the GAB server.
-
-There is also a log area where you can check what is happening inside the GAB client.
-
-![Deployment details](https://github.com/intelequia/GAB2019ScienceLab/raw/master/images/Deployment6.jpg)
-
-Each input takes around 5 minutes to be processed by a container (pipeline 1 + pipeline 2 execution times). After the input is processed, it goes to the upload queue, and once uploaded, you start appearing on the Global Azure Bootcamp Science lab Dashboards, available at https://gablabdashboard.azurewebsites.net. 
+7. Apply ingress controller:
+    * `kubectl apply -f lab/manifests/ingress.yaml`
 
 # Decomissioning the Science Lab
 Your lab deployment will continue working processing inputs until you delete the deployment resources. Note that this year our intention is to continue processing information after the GAB day. 
 
 In order to delete your deployment:
-1. Select the Resource Group containing your science lab deployment
+1. Select the Resource Group containing your AKS cluster
 2. Click on Delete and confirm by typing your resource group name
+3. Note there is a separate resource group containing the cluster infrastructure which should be automatically deleted when the cluster is deleted - but it is adviced to verify this
 
 Thanks for your support on Global Azure Bootcamp 2019 Science Lab. Live Long and Prosper!
 
 # Frequently Asked Questions
 1. **How much will cost?**
 
-The lab uses an Azure Container Instances. The cost of each ACI would be around $1 for a full day (consumption 1vCPU and 1GB RAM over 24h).  
-So for example, if you deploy the science lab with 4 container instances during 12 hours, the costs would be under $2.
-For more information about pricing:
-* [Azure Container Instances](https://azure.microsoft.com/en-us/pricing/details/container-instances/)
+Azure Kubernetes Service pricing is based on the nodes only - mainly node count and size. For least cost deploy with nodeCount 1 and set the VM size to something relatively small (for example A1 series) in the ARM template.
 
-2. **How many instances can I deploy?**
-
-If you are deploying the lab using Azure Container Instances, there is a limit of 60 ACIs per Azure Subscription. You can deploy more than 60 if you use more subscriptions, but please, do the maths following FAQ #1. Remember you can also deploy the science lab on your own laptop or on any other Docker powered environment.
-
-3. **Can I start crunching data before April 27th?**
+2. **Can I start crunching data before April 27th?**
 
 You can deploy the lab before April 27th just for testing purposes, but note that we will reset all the data, stats and dashboards on April 27th. 
 
-4. **Can I continue processing data after April 27th?**
+3. **Can I continue processing data after April 27th?**
 
 Yes, this year we want to continue hosting the Science Lab after the Global Azure Bootcamp day. Our intention is to continue processing data until the end of the TESS mission.
 
