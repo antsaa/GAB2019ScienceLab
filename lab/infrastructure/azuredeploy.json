@@ -27,8 +27,9 @@
         },
         "linuxAdminUsername": {
             "type": "string",
+            "defaultValue" : "clusteradmin",
             "metadata": {
-                "description": "User name for the Linux Virtual Machines."
+                "description": "User name for the Linux Virtual Machines. Please see https://docs.microsoft.com/en-us/azure/virtual-machines/linux/faq#what-are-the-username-requirements-when-creating-a-vm for non-allowed usernames"
             }
         },
         "sshRSAPublicKey": {
