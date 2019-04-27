@@ -32,6 +32,7 @@ In order to participate on the GAB Science Lab you will need:
 
 ## Deploying the lab using Azure Kubernetes Service (AKS)
 Deploy the lab using Azure Kubernetes Service. 
+If you're working through Azure CLI first login by running `az login` if you have multiple subscriptions, select the correct one using `az account set --subscription "Your cool sub"` (you can list your subs with `az account list --output table`)
 
 1. Create a Service Principal
     * `az ad sp create-for-rbac --skip-assignment`
@@ -56,13 +57,17 @@ Deploy the lab using Azure Kubernetes Service.
     * `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml`
 
 5. Apply deployment:
-    * `kubectl apply -f lab/manifests/deployment.yaml`
+    * Change the details to your ones in deployment.yaml
+    * Local: `kubectl apply -f lab/manifests/deployment.yaml`
+    * Cloud shell: `kubectl apply -f https://raw.githubusercontent.com/antsaa/GAB2019ScienceLab/master/lab/manifests/deployment.yaml`
 
 6. Apply service:
-    * `kubectl apply -f lab/manifests/service.yaml`
+    * Local: `kubectl apply -f lab/manifests/service.yaml`
+    * Cloud shell: `kubectl apply -f https://raw.githubusercontent.com/antsaa/GAB2019ScienceLab/master/lab/manifests/service.yaml`
 
 7. Apply ingress controller:
-    * `kubectl apply -f lab/manifests/ingress.yaml`
+    * Local: `kubectl apply -f lab/manifests/ingress.yaml`
+    * Cloud shell: `kubectl apply -f https://raw.githubusercontent.com/antsaa/GAB2019ScienceLab/master/lab/manifests/ingress.yaml`
 
 # Decomissioning the Science Lab
 Your lab deployment will continue working processing inputs until you delete the deployment resources. Note that this year our intention is to continue processing information after the GAB day. 
